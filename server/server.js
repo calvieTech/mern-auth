@@ -9,10 +9,12 @@ const cors = require('cors');
 const csurf = require('csurf');
 // const { environment } = require('./config');
 const helmet = require('helmet');
+const path = require('path');
 dotenv.config();
 require('express-async-errors');
 
 const port = process.env.PORT || 8001;
+const whitelist = ['http://localhost:3001', 'https://mern-auth.cthang.dev'];
 
 connectDB();
 
@@ -20,12 +22,22 @@ const app = express();
 // const isProduction = environment === 'production';
 app.use(morgan('dev'));
 
-app.use(cors({ origin: 'http://localhost:3001', credentials: true }));
+app.use(cors({ origin: whitelist, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use('/api/users', userRoutes);
+
+if (process.env.NODE_ENV === 'production') {
+  const dirname = path.resolve();
+  app.use(express.static(path.join(dirname, 'client/dist')));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(dirname, 'client', 'dist', 'index.html'));
+  });
+} else {
+  app.get('/', (req, res) => res.send('API running'));
+}
 
 // app.get('/api/csrf/restore', (req, res) => {
 //   const csrfToken = req.csrfToken();
@@ -34,8 +46,6 @@ app.use('/api/users', userRoutes);
 //     'XSRF-Token': csrfToken,
 //   });
 // });
-
-app.get('/', (req, res) => res.send('API running'));
 
 app.use(notFound);
 app.use(errorHandler);
