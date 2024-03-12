@@ -38,7 +38,6 @@ function RegisterPage() {
         navigate('/');
       } catch (err) {
         toast.error('Could not register');
-        // toast.error(err?.data?.message || err.error);
       }
     }
   };

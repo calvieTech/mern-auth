@@ -31,10 +31,8 @@ const ProfilePage = () => {
           email,
           password,
         }).unwrap();
-        console.log(`res: `, res);
 
         dispatch(setCredentials({ ...res }));
-        // console.log(`res2: `, res);
         toast.success('Profile updated!');
       } catch (err) {
         console.error('Error updating profile: ', err);
