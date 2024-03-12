@@ -11,12 +11,13 @@ const authUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
-    generateToken(res, user._id);
+    const jwt = generateToken(res, user._id);
 
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
+      jwt: jwt,
     });
   } else {
     res.status(401);
@@ -45,6 +46,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if (user) {
     generateToken(res, user._id);
+
     res.status(201).json({
       _id: user._id,
       name: user.name,
@@ -87,9 +89,12 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // @route   PUT /api/users/profile
 // @access  Private
 const updateUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
+  const user = await User.findById(req.body._id);
+
+  // console.log(res);
 
   if (user) {
+    // console.log(`user: `, user);
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
 

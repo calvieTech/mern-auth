@@ -15,9 +15,10 @@ function Header() {
 
   const [logoutApiCall] = useLogoutMutation();
 
-  const logoutHandler = async () => {
+  const logoutHandler = async (e) => {
+    // console.log(e.target.value);
     try {
-      await logoutApiCall().unwrap();
+      await logoutApiCall(userCredentials).unwrap();
       dispatch(logout());
       navigate('/login');
     } catch (error) {

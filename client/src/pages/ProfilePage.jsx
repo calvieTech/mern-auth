@@ -31,10 +31,13 @@ const ProfilePage = () => {
           email,
           password,
         }).unwrap();
+        console.log(`res: `, res);
 
         dispatch(setCredentials({ ...res }));
+        // console.log(`res2: `, res);
         toast.success('Profile updated!');
       } catch (err) {
+        console.error('Error updating profile: ', err);
         toast.error('Profile could not be updated!');
       }
     }
@@ -47,7 +50,7 @@ const ProfilePage = () => {
 
   return (
     <FormContainer>
-      <h1>Update Profile</h1>
+      <h1 className='text-center'>Update Profile</h1>
 
       <Form onSubmit={submitHandler}>
         <Form.Group className='my-2' controlId='name'>
