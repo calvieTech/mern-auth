@@ -6,7 +6,7 @@ const notFound = (req, res, next) => {
 
 const errorHandler = (err, req, res, next) => {
   let statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-  let msg = err.msg;
+  let msg = err.message;
 
   // If Mongoose not found error, set to 404 and change message
   // e.g. invalid id passed to a Mongoose query
